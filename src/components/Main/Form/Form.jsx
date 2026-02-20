@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useCallback } from 'react';
 import { TextField, Typography, Grid, Button, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -23,7 +23,7 @@ const NewTransactionForm = () => {
   const { segment } = useSafeSpeechContext();
   const [open, setOpen] = React.useState(false);
 
-  const createTransaction = () => {
+  const createTransaction = useCallback(() => {
     if (Number.isNaN(Number(formData.amount)) || !formData.date.includes('-')) return;
 
     if (incomeCategories.map((iC) => iC.type).includes(formData.category)) {
@@ -35,7 +35,7 @@ const NewTransactionForm = () => {
     setOpen(true);
     addTransaction({ ...formData, amount: Number(formData.amount), id: uuidv4() });
     setFormData(initialState);
-  };
+  }, [formData, addTransaction]);
 
   useEffect(() => {
     if (segment) {
