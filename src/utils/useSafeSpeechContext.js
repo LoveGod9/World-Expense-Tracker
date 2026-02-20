@@ -1,11 +1,13 @@
 import { useSpeechContext } from '@speechly/react-client';
 
 const useSafeSpeechContext = () => {
-  const appId = process.env.REACT_APP_SPEECHLY_APP_ID;
-  if (appId) {
+  try {
+    // Call hook unconditionally to satisfy rules-of-hooks; if there's no provider
+    // the library may throw — catch and return safe defaults instead.
     return useSpeechContext();
+  } catch (e) {
+    return { speechState: null, segment: null };
   }
-  return { speechState: null, segment: null };
 };
 
 export default useSafeSpeechContext;
